@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MainViewController.swift
 //  PokedexApp
 //
 //  Created by 김동현 on 8/8/24.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class MainViewController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
