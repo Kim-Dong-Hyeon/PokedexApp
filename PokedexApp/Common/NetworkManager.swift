@@ -33,8 +33,8 @@ class NetworkManager {
         
         // data 가 없거나 http 통신 에러 일 때 dataRetchFail 방출.
         guard let data = data,
-                let response = response as? HTTPURLResponse,
-                (200..<300).contains(response.statusCode) else {
+              let response = response as? HTTPURLResponse,
+              (200..<300).contains(response.statusCode) else {
           observer(.failure(NetworkError.dataFetchFail))
           return
         }
