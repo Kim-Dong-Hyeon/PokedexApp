@@ -22,4 +22,8 @@ struct PokemonTypeSlot: Codable {
 
 struct PokemonType: Codable {
   let name: String
+  
+  var displayName: String {
+    return PokemonTypeName(rawValue: name.lowercased())?.displayName ?? name.capitalized
+  }
 }

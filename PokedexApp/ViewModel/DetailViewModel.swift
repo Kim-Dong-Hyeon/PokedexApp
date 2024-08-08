@@ -25,7 +25,16 @@ class DetailViewModel {
     
     NetworkManager.shared.fetch(url: url)
       .subscribe(onSuccess: { [weak self] (detail: PokemonDetail) in
-        self?.pokemonDetail.onNext(detail)
+        var translatedDetail = detail
+        if let englishName = detail.name {
+          // PokemonDetail 구조체를 수정하여 새로운 값을 설정
+          translatedDetail = PokemonDetail(id: detail.id,
+                                           name: PokemonTranslator.getKoreanName(for: englishName),
+                                           types: detail.types,
+                                           height: detail.height,
+                                           weight: detail.weight)
+        }
+        self?.pokemonDetail.onNext(translatedDetail)
       }, onFailure: { error in
         print("Error fetching detail: \(error)")
       }).disposed(by: disposeBag)
