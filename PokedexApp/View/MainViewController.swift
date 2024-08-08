@@ -37,7 +37,7 @@ class MainViewController: UIViewController {
   }
   
   private func bind() {
-    viewModel.pokemonListSubject
+    viewModel.pokemonListRelay
       .observe(on: MainScheduler.instance)
       .subscribe(onNext: { [weak self] pokemonList in
         self?.pokemonList = pokemonList

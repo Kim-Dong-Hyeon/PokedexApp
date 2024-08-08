@@ -121,7 +121,7 @@ class DetailViewController: UIViewController {
   }
   
   private func bind() {
-    viewModel.pokemonDetail
+    viewModel.pokemonDetailRelay
       .observe(on: MainScheduler.instance)
       .subscribe(onNext: { [weak self] detail in
         guard let self = self else { return }

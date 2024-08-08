@@ -7,11 +7,12 @@
 
 import Foundation
 import RxSwift
+import RxRelay
 
 class DetailViewModel {
   
   private let disposeBag = DisposeBag()
-  let pokemonDetail = BehaviorSubject<PokemonDetail>(value: PokemonDetail(id: nil, name: nil, types: nil, height: nil, weight: nil))
+  let pokemonDetailRelay = BehaviorRelay<PokemonDetail>(value: PokemonDetail(id: nil, name: nil, types: nil, height: nil, weight: nil))
   
   init(pokemonId: String) {
     fetchPokemonDetail(id: pokemonId)
@@ -34,7 +35,7 @@ class DetailViewModel {
                                            height: detail.height,
                                            weight: detail.weight)
         }
-        self?.pokemonDetail.onNext(translatedDetail)
+        self?.pokemonDetailRelay.accept(translatedDetail)
       }, onFailure: { error in
         print("Error fetching detail: \(error)")
       }).disposed(by: disposeBag)

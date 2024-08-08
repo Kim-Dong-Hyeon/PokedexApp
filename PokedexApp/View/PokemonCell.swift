@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 class PokemonCell: UICollectionViewCell {
   static let id = "PokemonCell"
@@ -22,8 +23,8 @@ class PokemonCell: UICollectionViewCell {
   
   override init(frame: CGRect) {
     super.init(frame: frame)
-    contentView.addSubview(imageView)
-    imageView.frame = contentView.bounds
+    [imageView].forEach { contentView.addSubview($0) }
+    imageView.snp.makeConstraints { $0.edges.equalToSuperview() }
   }
   
   required init?(coder: NSCoder) {
@@ -33,6 +34,7 @@ class PokemonCell: UICollectionViewCell {
   // 스크롤시 버벅임 현상 줄이기
   override func prepareForReuse() {
     super.prepareForReuse()
+    imageView.kf.cancelDownloadTask()
     imageView.image = nil
   }
   
@@ -40,13 +42,7 @@ class PokemonCell: UICollectionViewCell {
     if let urlString = pokemon.url, let id = getIdFromUrl(urlString) {
       let imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(id).png"
       if let url = URL(string: imageUrl) {
-        DispatchQueue.global().async {
-          if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
-            DispatchQueue.main.async {
-              self.imageView.image = image
-            }
-          }
-        }
+        imageView.kf.setImage(with: url, placeholder: nil, options: [.transition(.fade(0.2)), .cacheOriginalImage])
       }
     }
   }
