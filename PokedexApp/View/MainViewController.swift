@@ -17,7 +17,7 @@ class MainViewController: UIViewController {
   
   private let headerImageView: UIImageView = {
     let imageView = UIImageView(image: UIImage(named: "pokemonBall"))
-    imageView.contentMode = .scaleAspectFit
+    imageView.contentMode = .scaleAspectFill
     return imageView
   }()
   
@@ -78,7 +78,7 @@ class MainViewController: UIViewController {
     ].forEach { view.addSubview($0) }
     
     headerImageView.snp.makeConstraints {
-      $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+      $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
       $0.centerX.equalToSuperview()
       $0.width.height.equalTo(100)
     }
@@ -88,10 +88,20 @@ class MainViewController: UIViewController {
       $0.left.right.bottom.equalTo(view.safeAreaLayoutGuide)
     }
   }
+  private func getIdFromUrl(_ url: String) -> String? {
+    let components = url.split(separator: "/")
+    return components.last.map { String($0) }
+  }
 }
 
 extension MainViewController: UICollectionViewDelegate {
-  
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    let selectedPokemon = pokemonList[indexPath.row]
+    guard let url = selectedPokemon.url, let id = getIdFromUrl(url) else { return }
+    let detailViewModel = DetailViewModel(pokemonId: id)
+    let detailViewController = DetailViewController(viewModel: detailViewModel)
+    navigationController?.pushViewController(detailViewController, animated: true)
+  }
 }
 
 extension MainViewController: UICollectionViewDataSource {

@@ -7,7 +7,6 @@
 
 import Foundation
 import RxSwift
-import RxCocoa
 
 class MainViewModel {
   // 구독 해제를 위한 DisposeBag.
