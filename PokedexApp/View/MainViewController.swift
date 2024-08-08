@@ -102,6 +102,18 @@ extension MainViewController: UICollectionViewDelegate {
     let detailViewController = DetailViewController(viewModel: detailViewModel)
     navigationController?.pushViewController(detailViewController, animated: true)
   }
+  
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    let offsetY = scrollView.contentOffset.y
+    let contentHeight = scrollView.contentSize.height
+    let height = scrollView.frame.size.height
+    print("offsetY: \(offsetY)")
+    print("계산 값 : \(contentHeight - height - 200)")
+    
+    if offsetY > contentHeight - height - 200 {
+      viewModel.fetchPokemonList()
+    }
+  }
 }
 
 extension MainViewController: UICollectionViewDataSource {
