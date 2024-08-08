@@ -9,11 +9,13 @@ import UIKit
 import SnapKit
 import RxSwift
 
+// 포켓몬 상세 정보를 표시하는 뷰 컨트롤러 클래스
 class DetailViewController: UIViewController {
   
-  private let viewModel: DetailViewModel
-  private let disposeBag = DisposeBag()
+  private let viewModel: DetailViewModel    // 뷰 모델 인스턴스
+  private let disposeBag = DisposeBag()     // RxSwift의 메모리 관리를 위한 DisposeBag
   
+  // 상세 정보 화면의 컨테이너 뷰
   private let containerView: UIView = {
     let view = UIView()
     view.backgroundColor = .darkRed
@@ -21,12 +23,14 @@ class DetailViewController: UIViewController {
     return view
   }()
   
+  // 포켓몬 이미지를 표시할 이미지 뷰
   private let imageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFill
     return imageView
   }()
   
+  // 포켓몬 이름을 표시할 레이블
   private let nameLabel: UILabel = {
     let label = UILabel()
     label.font = UIFont.boldSystemFont(ofSize: 30)
@@ -35,6 +39,7 @@ class DetailViewController: UIViewController {
     return label
   }()
   
+  // 포켓몬 타입을 표시할 레이블
   private let typeLabel: UILabel = {
     let label = UILabel()
     label.font = UIFont.boldSystemFont(ofSize: 20)
@@ -43,6 +48,7 @@ class DetailViewController: UIViewController {
     return label
   }()
   
+  // 포켓몬 키를 표시할 레이블
   private let heightLabel: UILabel = {
     let label = UILabel()
     label.font = UIFont.boldSystemFont(ofSize: 20)
@@ -51,6 +57,7 @@ class DetailViewController: UIViewController {
     return label
   }()
   
+  // 포켓몬 몸무게를 표시할 레이블
   private let weightLabel: UILabel = {
     let label = UILabel()
     label.font = UIFont.boldSystemFont(ofSize: 20)
@@ -59,6 +66,7 @@ class DetailViewController: UIViewController {
     return label
   }()
   
+  // 초기화 메서드
   init(viewModel: DetailViewModel) {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
@@ -74,6 +82,7 @@ class DetailViewController: UIViewController {
     bind()
   }
   
+  // UI를 구성하는 메서드
   private func configureUI() {
     view.backgroundColor = .mainRed
     
@@ -120,6 +129,7 @@ class DetailViewController: UIViewController {
     }
   }
   
+  // 뷰모델과 뷰를 바인딩하여 데이터를 주고 받는 메서드
   private func bind() {
     viewModel.pokemonDetailRelay
       .observe(on: MainScheduler.instance)

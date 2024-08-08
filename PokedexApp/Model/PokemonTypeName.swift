@@ -7,6 +7,7 @@
 
 import Foundation
 
+// 포켓몬 타입을 정의하는 열거형, 한국어 번역도 포함
 enum PokemonTypeName: String, CaseIterable, Codable {
   case normal
   case fire
@@ -27,6 +28,7 @@ enum PokemonTypeName: String, CaseIterable, Codable {
   case steel
   case fairy
   
+  // 각 타입의 한국어 명칭으로 반환
   var displayName: String {
     switch self {
     case .normal: return "노말"

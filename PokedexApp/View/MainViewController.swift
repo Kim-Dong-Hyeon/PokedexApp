@@ -9,18 +9,21 @@ import UIKit
 import RxSwift
 import SnapKit
 
+// 포켓몬 목록을 표시하는 MainViewController
 class MainViewController: UIViewController {
   
-  private let viewModel = MainViewModel()
-  private let disposeBag = DisposeBag()
-  private var pokemonList = [PokemonListItem]()
+  private let viewModel = MainViewModel()       // 뷰 모델 인스턴스
+  private let disposeBag = DisposeBag()         // RxSwift의 메모리 관리를 위한 DisposeBag
+  private var pokemonList = [PokemonListItem]() // 포켓몬 목록 데이터 저장
   
+  // 상단 몬스터볼 이미지 뷰
   private let headerImageView: UIImageView = {
     let imageView = UIImageView(image: UIImage(named: "pokemonBall"))
     imageView.contentMode = .scaleAspectFill
     return imageView
   }()
   
+  // 포켓몬 목록을 표시할 컬렉션 뷰
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
     collectionView.register(PokemonCell.self, forCellWithReuseIdentifier: PokemonCell.id)
@@ -36,6 +39,7 @@ class MainViewController: UIViewController {
     configureUI()
   }
   
+  // 뷰모델과 뷰를 바인딩하여 데이터를 주고 받는 메서드
   private func bind() {
     viewModel.pokemonListRelay
       .observe(on: MainScheduler.instance)
@@ -47,6 +51,7 @@ class MainViewController: UIViewController {
       }).disposed(by: disposeBag)
   }
   
+  // 컬렉션 뷰의 레이아웃을 생성하는 메서드
   private func createLayout() -> UICollectionViewLayout {
     
     let itemSize = NSCollectionLayoutSize(
@@ -69,6 +74,7 @@ class MainViewController: UIViewController {
     return UICollectionViewCompositionalLayout(section: section)
   }
   
+  // UI를 구성하는 메서드
   private func configureUI() {
     view.backgroundColor = .mainRed
     
@@ -88,13 +94,17 @@ class MainViewController: UIViewController {
       $0.left.right.bottom.equalTo(view.safeAreaLayoutGuide)
     }
   }
+  
+  // URL에서 포켓몬 ID를 추출하는 메서드
   private func getIdFromUrl(_ url: String) -> String? {
     let components = url.split(separator: "/")
     return components.last.map { String($0) }
   }
 }
 
+// 컬렉션 뷰의 Delegate 메서드를 구현
 extension MainViewController: UICollectionViewDelegate {
+  // 포켓몬을 선택했을 때 상세 정보 화면으로 이동
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     let selectedPokemon = pokemonList[indexPath.row]
     guard let url = selectedPokemon.url, let id = getIdFromUrl(url) else { return }
@@ -103,6 +113,7 @@ extension MainViewController: UICollectionViewDelegate {
     navigationController?.pushViewController(detailViewController, animated: true)
   }
   
+  // 스크롤 시 추가 데이터를 로드하는 무한 스크롤 구현
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     let offsetY = scrollView.contentOffset.y
     let contentHeight = scrollView.contentSize.height
@@ -116,6 +127,7 @@ extension MainViewController: UICollectionViewDelegate {
   }
 }
 
+// 컬렉션 뷰의 DataSource 메서드를 구현
 extension MainViewController: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return pokemonList.count
